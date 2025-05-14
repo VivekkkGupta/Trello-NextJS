@@ -1,6 +1,7 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers/Providers";
+import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -9,8 +10,8 @@ const roboto = Roboto({
 })
 
 export const metadata = {
-  title: "Trello - Task Manager",
-  description: "A Task Manager tool for team to collaborate and work with Tasks.",
+  title: APP_NAME,
+  description: APP_DESCRIPTION,
 };
 
 export default function RootLayout({ children }) {

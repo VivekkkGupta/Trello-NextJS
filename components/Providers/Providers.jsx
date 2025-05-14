@@ -1,13 +1,16 @@
 "use client"
 
+import { AppContextProvider } from "@/contexts/AppContext"
 import { ClerkProvider } from "@clerk/nextjs"
 
 const Providers = ({ children }) => {
     return (
         <>
-            <ClerkProvider>
-                {children}
-            </ClerkProvider>
+            <AppContextProvider>
+                <ClerkProvider>
+                    {children}
+                </ClerkProvider>
+            </AppContextProvider>
         </>
     )
 }
