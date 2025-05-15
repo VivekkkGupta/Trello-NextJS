@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String   @unique
+  name      String
+  email     String   @unique
+  avatar    String?
+  role      String   @default("user")
+  platform  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  createdTasks  Task[]    @relation("UserCreatedTasks")
+  assignedTasks Task[]    @relation("UserAssignedTasks")
+  comments      Comment[] @relation("UserComments")
+}
+
+model Task {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  status      String
+  startDate   DateTime
+  dueDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  assignedToId String    @db.ObjectId
+  assignedTo   User      @relation("UserAssignedTasks", fields: [assignedToId], references: [id])
+  createdById  String    @db.ObjectId
+  createdBy    User      @relation("UserCreatedTasks", fields: [createdById], references: [id])
+  comments     Comment[]
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  taskId String @db.ObjectId
+  task   Task   @relation(fields: [taskId], references: [id])
+  userId String @db.ObjectId
+  user   User   @relation("UserComments", fields: [userId], references: [id])
+}
